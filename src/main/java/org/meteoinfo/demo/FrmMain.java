@@ -22,43 +22,44 @@ import javax.swing.JFileChooser;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.meteoinfo.data.GridData;
 import org.meteoinfo.data.StationData;
-import org.meteoinfo.data.mapdata.MapDataManage;
-import org.meteoinfo.data.meteodata.DrawMeteoData;
-import org.meteoinfo.data.meteodata.GridDataSetting;
-import org.meteoinfo.geoprocess.analysis.InterpolationMethods;
-import org.meteoinfo.geoprocess.analysis.InterpolationSetting;
+import org.meteoinfo.geo.mapdata.MapDataManage;
+import org.meteoinfo.geo.meteodata.DrawMeteoData;
+import org.meteoinfo.data.GridDataSetting;
+import org.meteoinfo.geo.analysis.InterpolationMethods;
+import org.meteoinfo.geo.analysis.InterpolationSetting;
 import org.meteoinfo.data.meteodata.MeteoDataInfo;
 import org.meteoinfo.data.meteodata.StationModelData;
-import org.meteoinfo.global.MIMath;
-import org.meteoinfo.global.PointD;
-import org.meteoinfo.global.event.ActiveMapFrameChangedEvent;
-import org.meteoinfo.global.event.IActiveMapFrameChangedListener;
+import org.meteoinfo.common.MIMath;
+import org.meteoinfo.common.PointD;
+import org.meteoinfo.geo.util.GeoMathUtil;
+import org.meteoinfo.ui.event.ActiveMapFrameChangedEvent;
+import org.meteoinfo.ui.event.IActiveMapFrameChangedListener;
 import org.meteoinfo.ndarray.DataType;
-import org.meteoinfo.layer.LabelSet;
-import org.meteoinfo.layer.MapLayer;
-import org.meteoinfo.layer.RasterLayer;
-import org.meteoinfo.layer.VectorLayer;
-import org.meteoinfo.layout.LayoutGraphic;
-import org.meteoinfo.layout.LayoutLegend;
-import org.meteoinfo.layout.LayoutMap;
-import org.meteoinfo.layout.LegendStyles;
-import org.meteoinfo.layout.MouseMode;
-import org.meteoinfo.legend.AlignType;
-import org.meteoinfo.legend.LegendManage;
-import org.meteoinfo.legend.LegendScheme;
-import org.meteoinfo.legend.LegendType;
-import org.meteoinfo.legend.MapFrame;
-import org.meteoinfo.legend.PointBreak;
-import org.meteoinfo.legend.PolygonBreak;
-import org.meteoinfo.legend.PolylineBreak;
-import org.meteoinfo.map.MaskOut;
-import org.meteoinfo.map.MouseTools;
+import org.meteoinfo.geo.layer.LabelSet;
+import org.meteoinfo.geo.layer.MapLayer;
+import org.meteoinfo.geo.layer.RasterLayer;
+import org.meteoinfo.geo.layer.VectorLayer;
+import org.meteoinfo.geo.layout.LayoutGraphic;
+import org.meteoinfo.geo.layout.LayoutLegend;
+import org.meteoinfo.geo.layout.LayoutMap;
+import org.meteoinfo.geo.layout.LegendStyles;
+import org.meteoinfo.geo.layout.MouseMode;
+import org.meteoinfo.geometry.legend.AlignType;
+import org.meteoinfo.geo.legend.LegendManage;
+import org.meteoinfo.geometry.legend.LegendScheme;
+import org.meteoinfo.geometry.legend.LegendType;
+import org.meteoinfo.geo.legend.MapFrame;
+import org.meteoinfo.geometry.legend.PointBreak;
+import org.meteoinfo.geometry.legend.PolygonBreak;
+import org.meteoinfo.geometry.legend.PolylineBreak;
+import org.meteoinfo.geo.mapview.MaskOut;
+import org.meteoinfo.geo.mapview.MouseTools;
 import org.meteoinfo.projection.KnownCoordinateSystems;
-import org.meteoinfo.projection.info.ProjectionInfo;
+import org.meteoinfo.projection.ProjectionInfo;
 import org.meteoinfo.projection.ProjectionNames;
 import org.meteoinfo.projection.Reproject;
-import org.meteoinfo.shape.PointShape;
-import org.meteoinfo.shape.ShapeTypes;
+import org.meteoinfo.geometry.shape.PointShape;
+import org.meteoinfo.geometry.shape.ShapeTypes;
 
 /**
  *
@@ -140,10 +141,10 @@ public class FrmMain extends javax.swing.JFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel_Map = new javax.swing.JPanel();
-        mapView1 = new org.meteoinfo.map.MapView();
+        mapView1 = new org.meteoinfo.geo.mapview.MapView();
         jPanel_Layout = new javax.swing.JPanel();
-        mapLayout1 = new org.meteoinfo.layout.MapLayout();
-        layersLegend1 = new org.meteoinfo.legend.LayersLegend();
+        mapLayout1 = new org.meteoinfo.geo.layout.MapLayout();
+        layersLegend1 = new org.meteoinfo.geo.legend.LayersLegend();
         jToolBar2 = new javax.swing.JToolBar();
         jLabel_Status = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -586,7 +587,7 @@ public class FrmMain extends javax.swing.JFrame {
             LabelSet labelSet = cityLayer.getLabelSet();
             labelSet.setFieldName("NAME");
             labelSet.setAvoidCollision(true);
-            labelSet.setLabelAlignType(AlignType.Center);
+            labelSet.setLabelAlignType(AlignType.CENTER);
             labelSet.setYOffset(0);
             Font font = new Font("楷体", Font.PLAIN, 16);
             labelSet.setLabelFont(font);
@@ -801,32 +802,32 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void jButton_SelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SelectActionPerformed
         // TODO add your handling code here:
-        this.mapView1.setMouseTool(MouseTools.SelectElements);
-        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.Select);
+        this.mapView1.setMouseTool(MouseTools.SELECT_ELEMENTS);
+        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.SELECT);
 
         setCurrentTool((JButton) evt.getSource());
     }//GEN-LAST:event_jButton_SelectActionPerformed
 
     private void jButton_ZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ZoomInActionPerformed
         // TODO add your handling code here:
-        this.mapView1.setMouseTool(MouseTools.Zoom_In);
-        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.Map_ZoomIn);
+        this.mapView1.setMouseTool(MouseTools.ZOOM_IN);
+        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.MAP_ZOOM_IN);
 
         setCurrentTool((JButton) evt.getSource());
     }//GEN-LAST:event_jButton_ZoomInActionPerformed
 
     private void jButton_ZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ZoomOutActionPerformed
         // TODO add your handling code here:
-        this.mapView1.setMouseTool(MouseTools.Zoom_Out);
-        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.Map_ZoomOut);
+        this.mapView1.setMouseTool(MouseTools.ZOOM_OUT);
+        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.MAP_ZOOM_OUT);
 
         setCurrentTool((JButton) evt.getSource());
     }//GEN-LAST:event_jButton_ZoomOutActionPerformed
 
     private void jButton_PanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PanActionPerformed
         // TODO add your handling code here:
-        this.mapView1.setMouseTool(MouseTools.Pan);
-        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.Map_Pan);
+        this.mapView1.setMouseTool(MouseTools.PAN);
+        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.MAP_PAN);
 
         setCurrentTool((JButton) evt.getSource());
     }//GEN-LAST:event_jButton_PanActionPerformed
@@ -838,8 +839,8 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void jButton_IdentiferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_IdentiferActionPerformed
         // TODO add your handling code here:
-        this.mapView1.setMouseTool(MouseTools.Identifer);
-        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.Map_Identifer);
+        this.mapView1.setMouseTool(MouseTools.IDENTIFIER);
+        this.layersLegend1.getMapLayout().setMouseMode(MouseMode.MAP_IDENTIFIER);
 
         setCurrentTool((JButton) evt.getSource());
     }//GEN-LAST:event_jButton_IdentiferActionPerformed
@@ -905,7 +906,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(press,
-                LegendType.UniqueValue, ShapeTypes.Polyline);
+                LegendType.UNIQUE_VALUE, ShapeTypes.POLYLINE);
 
         //Create a contour layer
         VectorLayer aLayer = DrawMeteoData.createContourLayer(press, aLS, "Contour_PS", "PS", true);
@@ -921,7 +922,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Add a legend in layout
         LayoutLegend aLegend = mapLayout1.addLegend(650, 100);
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_ContourActionPerformed
@@ -941,7 +942,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(press,
-                LegendType.GraduatedColor, ShapeTypes.Polygon);
+                LegendType.GRADUATED_COLOR, ShapeTypes.POLYGON);
 
         //Create a shaded layer
         VectorLayer aLayer = DrawMeteoData.createShadedLayer(press, aLS, "Shaded_PS", "PS", true);
@@ -963,7 +964,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_ShadedActionPerformed
@@ -983,7 +984,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(press,
-                LegendType.GraduatedColor, ShapeTypes.Polygon);
+                LegendType.GRADUATED_COLOR, ShapeTypes.POLYGON);
 
         //Create a shaded layer
         VectorLayer aLayer = DrawMeteoData.createGridFillLayer(press, aLS, "GridFill_PS", "PS");
@@ -1004,7 +1005,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_GridFillActionPerformed
@@ -1024,7 +1025,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(press,
-                LegendType.GraduatedColor, ShapeTypes.Point);
+                LegendType.GRADUATED_COLOR, ShapeTypes.POINT);
 
         //Create a shaded layer
         VectorLayer aLayer = DrawMeteoData.createGridPointLayer(press, aLS, "GridPoint_PS", "PS");
@@ -1045,7 +1046,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_GridPointActionPerformed
@@ -1065,7 +1066,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(press,
-                LegendType.GraduatedColor, ShapeTypes.Polygon);
+                LegendType.GRADUATED_COLOR, ShapeTypes.POLYGON);
 
         //Create a shaded layer
         RasterLayer aLayer = DrawMeteoData.createRasterLayer(press, "GridFill_PS", aLS);
@@ -1086,7 +1087,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_RasterActionPerformed
@@ -1110,7 +1111,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(tData,
-                LegendType.GraduatedColor, ShapeTypes.Point);
+                LegendType.GRADUATED_COLOR, ShapeTypes.POINT);
 
         //Create a contour layer
         VectorLayer aLayer = DrawMeteoData.createGridVectorLayer(uData, vData, tData, aLS, true, "Vector_UV", true);
@@ -1131,7 +1132,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_VectorActionPerformed
@@ -1153,7 +1154,7 @@ public class FrmMain extends javax.swing.JFrame {
         GridData vData = aDataInfo.getGridData("V");
 
         //Create a legend scheme
-        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.Point, Color.blue, 10);
+        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POINT, Color.blue, 10);
 
         //Create a barb layer
         VectorLayer aLayer = DrawMeteoData.createGridBarbLayer(uData, vData, uData, aLS, false, "Barb_UV", true);
@@ -1185,7 +1186,7 @@ public class FrmMain extends javax.swing.JFrame {
         GridData vData = aDataInfo.getGridData("V");
 
         //Create a legend scheme
-        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.Polyline, Color.blue, 1);
+        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POLYLINE, Color.blue, 1);
 
         //Create a contour layer
         VectorLayer aLayer = DrawMeteoData.createStreamlineLayer(uData, vData, 4, aLS, "Streamline_UV", true);
@@ -1214,8 +1215,8 @@ public class FrmMain extends javax.swing.JFrame {
         StationData visData = aDataInfo.getStationData("Visibility");
 
         //Create a legend scheme
-        LegendScheme aLS = LegendManage.createLegendSchemeFromStationData(visData, LegendType.GraduatedColor,
-                ShapeTypes.Point);
+        LegendScheme aLS = LegendManage.createLegendSchemeFromStationData(visData, LegendType.GRADUATED_COLOR,
+                ShapeTypes.POINT);
         for (int i = 0; i < aLS.getBreakNum(); i++) {
             ((PointBreak) aLS.getLegendBreaks().get(i)).setSize(8);
         }
@@ -1238,7 +1239,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         if (this.jTabbedPane1.getSelectedIndex() == 1) {
             mapLayout1.paintGraphics();
@@ -1256,7 +1257,7 @@ public class FrmMain extends javax.swing.JFrame {
         aDataInfo.openMICAPSData(fileName);
 
         //Create a legend scheme
-        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.Point, Color.blue, 12);
+        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POINT, Color.blue, 12);
 
         //Get station model data
         StationModelData stationModelData = aDataInfo.getStationModelData();
@@ -1287,7 +1288,7 @@ public class FrmMain extends javax.swing.JFrame {
         StationData wData = aDataInfo.getStationData("WeatherNow");
 
         //Create a legend scheme
-        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.Point, Color.blue, 15);
+        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POINT, Color.blue, 15);
 
         //Create a contour layer
         VectorLayer aLayer = DrawMeteoData.createWeatherSymbolLayer(wData, "All Weather", "Weather");
@@ -1307,7 +1308,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         if (this.jTabbedPane1.getSelectedIndex() == 1) {
             mapLayout1.paintGraphics();
@@ -1329,7 +1330,7 @@ public class FrmMain extends javax.swing.JFrame {
         StationData wsData = aDataInfo.getStationData("WindSpeed");
 
         //Create a legend scheme
-        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.Point, Color.blue, 15);
+        LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POINT, Color.blue, 15);
 
         //Create a contour layer
         VectorLayer aLayer = DrawMeteoData.createSTVectorLayer(wdData, wsData, aLS, "StationVector", false);
@@ -1365,15 +1366,15 @@ public class FrmMain extends javax.swing.JFrame {
         InterpolationSetting gridInterp = new InterpolationSetting();
         gridInterp.setGridDataSetting(aGDP);
 
-        gridInterp.setInterpolationMethod(InterpolationMethods.IDW_Radius);
+        gridInterp.setInterpolationMethod(InterpolationMethods.IDW_RADIUS);
         gridInterp.setRadius(2);
         gridInterp.setMinPointNum(1);
 
-        GridData gridData = stationData.interpolateData(gridInterp);
+        GridData gridData = GeoMathUtil.interpolateData(stationData, gridInterp);
 
         //Create legend scheme
-        LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(gridData, LegendType.GraduatedColor,
-                ShapeTypes.Polygon);
+        LegendScheme aLS = LegendManage.createLegendSchemeFromGridData(gridData, LegendType.GRADUATED_COLOR,
+                ShapeTypes.POLYGON);
         ((PolygonBreak) aLS.getLegendBreaks().get(0)).setDrawFill(false);
 
         //Create layer
@@ -1396,7 +1397,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         if (this.jTabbedPane1.getSelectedIndex() == 1) {
             mapLayout1.paintGraphics();
@@ -1441,9 +1442,9 @@ public class FrmMain extends javax.swing.JFrame {
     private void jMenuItem_CreatePointLayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CreatePointLayerActionPerformed
         // TODO add your handling code here:
         //New layer
-        VectorLayer aLayer = new VectorLayer(ShapeTypes.Point);
+        VectorLayer aLayer = new VectorLayer(ShapeTypes.POINT);
         aLayer.setLayerName("New_Point_Layer");
-        aLayer.setLegendScheme(LegendManage.createSingleSymbolLegendScheme(ShapeTypes.Point, Color.black, 10));
+        aLayer.setLegendScheme(LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POINT, Color.black, 10));
         aLayer.setVisible(true);
 
         //Add fields            
@@ -1528,7 +1529,7 @@ public class FrmMain extends javax.swing.JFrame {
         } else {
             aLegend = mapLayout1.addLegend(650, 100);
         }
-        aLegend.setLegendStyle(LegendStyles.Bar_Vertical);
+        aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
         aLegend.setLegendLayer(aLayer);
         if (this.jTabbedPane1.getSelectedIndex() == 1) {
             mapLayout1.paintGraphics();
@@ -1635,8 +1636,8 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
-    private org.meteoinfo.legend.LayersLegend layersLegend1;
-    private org.meteoinfo.layout.MapLayout mapLayout1;
-    private org.meteoinfo.map.MapView mapView1;
+    private org.meteoinfo.geo.legend.LayersLegend layersLegend1;
+    private org.meteoinfo.geo.layout.MapLayout mapLayout1;
+    private org.meteoinfo.geo.mapview.MapView mapView1;
     // End of variables declaration//GEN-END:variables
 }

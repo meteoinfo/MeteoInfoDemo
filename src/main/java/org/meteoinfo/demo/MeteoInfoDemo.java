@@ -37,7 +37,7 @@ public class MeteoInfoDemo {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 //registerFonts();
-                org.meteoinfo.global.util.FontUtil.registerWeatherFont();
+                org.meteoinfo.ui.util.FontUtil.registerWeatherFont();
                 FrmMain frame = new FrmMain();
                 frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame.setLocationRelativeTo(null);
