@@ -6,7 +6,7 @@ MeteoInfo library usage demo
 Features
 --------
 
-This demo program demonstrates the usage of MeteoInfoLib library to develop
+This demo program demonstrates the usage of MeteoInfo libraries to develop
 meteorological software with GIS functions.
 
 License
