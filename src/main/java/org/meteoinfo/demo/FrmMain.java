@@ -909,11 +909,14 @@ public class FrmMain extends javax.swing.JFrame {
                 LegendType.UNIQUE_VALUE, ShapeTypes.POLYLINE);
 
         //Create a contour layer
-        VectorLayer aLayer = DrawMeteoData.createContourLayer(press, aLS, "Contour_PS", "PS", true);
+        VectorLayer layer = DrawMeteoData.createContourLayer(press, aLS, "Contour_PS", "PS", true);
+        LabelSet labelSet = layer.getLabelSet();
+        labelSet.setLabelFont(new Font("Arial", Font.PLAIN, 14));
+        layer.addLabels();
 
         //Add layer
-        layersLegend1.getActiveMapFrame().addLayer(aLayer);
-        layersLegend1.getActiveMapFrame().moveLayer(aLayer.getHandle(), 2);
+        layersLegend1.getActiveMapFrame().addLayer(layer);
+        layersLegend1.getActiveMapFrame().moveLayer(layer.getHandle(), 2);
         layersLegend1.repaint();
 
         //Change title of the layout
@@ -923,7 +926,7 @@ public class FrmMain extends javax.swing.JFrame {
         //Add a legend in layout
         LayoutLegend aLegend = mapLayout1.addLegend(650, 100);
         aLegend.setLegendStyle(LegendStyles.BAR_VERTICAL);
-        aLegend.setLegendLayer(aLayer);
+        aLegend.setLegendLayer(layer);
         mapLayout1.paintGraphics();
     }//GEN-LAST:event_jMenuItem_ContourActionPerformed
 
