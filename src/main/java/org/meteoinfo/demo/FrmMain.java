@@ -32,6 +32,7 @@ import org.meteoinfo.data.meteodata.StationModelData;
 import org.meteoinfo.common.MIMath;
 import org.meteoinfo.common.PointD;
 import org.meteoinfo.geo.util.GeoMathUtil;
+import org.meteoinfo.geometry.legend.*;
 import org.meteoinfo.ui.event.ActiveMapFrameChangedEvent;
 import org.meteoinfo.ui.event.IActiveMapFrameChangedListener;
 import org.meteoinfo.ndarray.DataType;
@@ -44,14 +45,8 @@ import org.meteoinfo.geo.layout.LayoutLegend;
 import org.meteoinfo.geo.layout.LayoutMap;
 import org.meteoinfo.geo.layout.LegendStyles;
 import org.meteoinfo.geo.layout.MouseMode;
-import org.meteoinfo.geometry.legend.AlignType;
 import org.meteoinfo.geo.legend.LegendManage;
-import org.meteoinfo.geometry.legend.LegendScheme;
-import org.meteoinfo.geometry.legend.LegendType;
 import org.meteoinfo.geo.legend.MapFrame;
-import org.meteoinfo.geometry.legend.PointBreak;
-import org.meteoinfo.geometry.legend.PolygonBreak;
-import org.meteoinfo.geometry.legend.PolylineBreak;
 import org.meteoinfo.geo.mapview.MaskOut;
 import org.meteoinfo.geo.mapview.MouseTools;
 import org.meteoinfo.projection.KnownCoordinateSystems;
@@ -1190,6 +1185,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         //Create a legend scheme
         LegendScheme aLS = LegendManage.createSingleSymbolLegendScheme(ShapeTypes.POLYLINE, Color.blue, 1);
+        aLS.setLegendBreak(0, new StreamlineBreak((PolylineBreak) aLS.getLegendBreak(0)));
 
         //Create a contour layer
         VectorLayer aLayer = DrawMeteoData.createStreamlineLayer(uData, vData, 4, aLS, "Streamline_UV", true);
